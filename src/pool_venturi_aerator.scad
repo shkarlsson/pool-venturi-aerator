@@ -103,7 +103,7 @@ module venturi_core() {
     // Matches the downstream expansion slope that the air intake stem runs alongside
     diverge_angle = atan2(inlet_or - throat_or, diverge_len);
     
-    air_nipple_offset = ((throat_id / 2) * cos(diverge_angle)) + (air_nipple_od / 2);
+    air_nipple_offset = (throat_or * cos(diverge_angle)) + (air_bore_id / 2);
 
     
     difference() {

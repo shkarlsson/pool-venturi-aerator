@@ -18,7 +18,7 @@ jobs:
       - name: Install Modern OpenSCAD & System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb python3-pip libglu1-mesa libgl1-mesa-glx
+          sudo apt-get install -y xvfb python3-pip libglu1-mesa libgl1-mesa-dev
           python3 -c "import urllib.request; urllib.request.urlretrieve('https://files.openscad.org/snapshots/OpenSCAD-2026.08.28-x86_64.AppImage', '/tmp/OpenSCAD.AppImage')"
           chmod +x /tmp/OpenSCAD.AppImage
           cd /tmp && ./OpenSCAD.AppImage --appimage-extract

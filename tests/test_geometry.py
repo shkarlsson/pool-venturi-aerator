@@ -18,7 +18,6 @@ def test_variant(scad_path, variant):
     
     print(f"\n[TEST] Running validation for variant: {name}")
     
-    # Build -D CLI parameter arguments for OpenSCAD
     cmd_params = []
     for k, v in params.items():
         cmd_params.extend(["-D", f"{k}={v}"])
@@ -26,8 +25,8 @@ def test_variant(scad_path, variant):
     with tempfile.TemporaryDirectory() as tmpdir:
         stl_path = os.path.join(tmpdir, f"{name}.stl")
         
-        # 1. Compile with headless OpenSCAD
-        cmd = ["openscad", "-o", stl_path, scad_path] + cmd_params
+        # 1. Compile with headless OpenSCAD using modern Manifold engine
+        cmd = ["openscad", "--enable=manifold", "-o", stl_path, scad_path] + cmd_params
         res = subprocess.run(cmd, capture_output=True, text=True)
         
         if res.returncode != 0:
@@ -40,7 +39,7 @@ def test_variant(scad_path, variant):
             
         print(f"[PASS] Successfully rendered {name}.stl ({os.path.getsize(stl_path)} bytes)")
         
-        # 2. Check manifoldness / volume via trimesh if available
+        # 2. Check manifoldness / volume via trimesh
         try:
             import trimesh
             mesh = trimesh.load(stl_path)

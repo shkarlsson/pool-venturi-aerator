@@ -52,8 +52,6 @@ main_id             = mating_hose_id - (2 * wall_thick);
 total_length        = (2 * barb_length) + spacer_len + converge_len + diverge_len;
 max_outer_r         = (mating_hose_id / 2) + barb_ridge_extra;
 
-air_nipple_offset   = air_tube_id + air_nipple_wall + max(air_nipple_wall, wall_thick);
-
 // --- MODULES ---
 
 module hose_barb(od, len, wall) {
@@ -101,8 +99,12 @@ module venturi_core() {
     inlet_or  = mating_hose_id / 2;
     throat_or = throat_ir + wall_thick;
     
-    // Angle of the converging cone wall relative to the central Z axis
-    converge_angle = atan2(inlet_or - throat_or, converge_len);
+    // Angle of the diverging diffuser cone wall relative to the central Z axis
+    // Matches the downstream expansion slope that the air intake stem runs alongside
+    diverge_angle = atan2(inlet_or - throat_or, diverge_len);
+    
+    air_nipple_offset = ((throat_id / 2) * cos(diverge_angle)) + (air_nipple_od / 2);
+
     
     difference() {
         union() {
@@ -111,28 +113,33 @@ module venturi_core() {
             // Diverging outer cone
             translate([0, 0, converge_len])
                 cylinder(r1 = throat_or, r2 = inlet_or, h = diverge_len, center = false);
-            // Tapered air suction nipple tilted to share the converging cone wall slope
+            // Tapered air suction nipple tilted to match the diverging expansion cone slope
             // and pointing downstream towards the expansion chamber (+Z)
             translate([0, 0, converge_len])
-                rotate([0, converge_angle, 0])
-                    translate([air_nipple_offset,0,-10])
-                        air_nipple_outer(inlet_or, air_nipple_height, air_nipple_od / 2);
+                rotate([0, diverge_angle, 0])
+                    translate([air_nipple_offset,0,-15])
+                        air_nipple_outer(inlet_or, air_nipple_height + 5, air_nipple_od / 2);
         }
         
         // Internal Flow Path (The Venturi)
+        // Entry & exit margins for clean CGAL manifold subtractions without altering boundary diameters
+        conv_slope = (inlet_ir - throat_ir) / converge_len;
+        div_slope  = (inlet_ir - throat_ir) / diverge_len;
+        eps = 0.5;
+        
         // 1. Converging cone
-        translate([0, 0, -0.01])
-            cylinder(r1 = inlet_ir, r2 = throat_ir, h = converge_len + 0.02, center = false);
+        translate([0, 0, -eps])
+            cylinder(r1 = inlet_ir + (conv_slope * eps), r2 = throat_ir, h = converge_len + eps, center = false);
             
         // 2. Diverging expansion cone
         translate([0, 0, converge_len])
-            cylinder(r1 = throat_ir, r2 = inlet_ir, h = diverge_len + 0.01, center = false);
+            cylinder(r1 = throat_ir, r2 = inlet_ir + (div_slope * eps), h = diverge_len + eps, center = false);
             
         // 3. Air suction hole drilled through the tilted nipple into the start of the expansion chamber
         translate([0, 0, converge_len])
-            rotate([0, converge_angle, 0])
-                translate([air_nipple_offset,0,-10])
-                    cylinder(r = air_bore_id / 2, h = inlet_or + air_nipple_height + 5, center = false);
+            rotate([0, diverge_angle, 0])
+                translate([air_nipple_offset,0,-20])
+                    cylinder(r = air_bore_id / 2, h = inlet_or + air_nipple_height + 30, center = false);
     }
 }
 

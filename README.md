@@ -8,6 +8,8 @@ A fully parametric, hydraulic in-line Venturi aerator for above-ground pool retu
 
 It uses the Venturi effect to create a localized low-pressure zone at the constricted throat, drawing ambient air through a snorkel tube and injecting micro-bubbles into the pool to raise pH, cool water in hot weather, and create a spa jet stream without external air pumps.
 
+> 🌐 **Interactive 3D Preview:** View and inspect the model in 3D directly on GitHub: **[models/pool_venturi_aerator_default.stl](models/pool_venturi_aerator_default.stl)**
+
 ---
 
 ## ⚖️ Licensing & Open Source Terms

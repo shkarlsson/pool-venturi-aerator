@@ -11,7 +11,7 @@ $fn = 90;
 
 // [Main Pool Hose Barb (Water In / Water Out)]
 // Inside diameter of your flexible pool hose (e.g. 32mm / 1.25" or 38mm / 1.5")
-mating_hose_id      = 38.0; 
+mating_hose_id      = 32.0; 
 // Wall thickness of the printed part (ensure 100% watertightness)
 wall_thick          = 3.5;  
 // Length of each hose barb end
@@ -22,7 +22,7 @@ barb_ridge_extra    = 0.5;
 // [Hydraulic Venturi Core]
 // Constricted venturi throat ID (accelerates water velocity to create vacuum)
 // Recommended: 12-14mm for small pumps (<3m3/h), 14-16mm for medium (3-6m3/h), 18-20mm for large (>6m3/h)
-throat_id           = 16.0; 
+throat_id           = 12.0; 
 // Length of converging cone
 converge_len        = 20.0; 
 // Length of diverging expansion cone (diffuser)

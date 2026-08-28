@@ -71,3 +71,10 @@ jobs:
         with:
           files: dist/*
           generate_release_notes: true
+
+      - name: Publish to Thingiverse
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          THINGIVERSE_TOKEN: ${{ secrets.THINGIVERSE_TOKEN }}
+        run: |
+          python3 scripts/publish_thingiverse.py

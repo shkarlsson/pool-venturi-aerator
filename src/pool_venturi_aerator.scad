@@ -2,6 +2,9 @@
 // Parametric In-Line Venturi Pool Aerator (External Hose Mount)
 // Upstream Source: https://github.com/shkarlsson/pool-venturi-aerator
 // License: CERN-OHL-S v2 (Source) / CC-BY-SA 4.0 (Mesh Exports)
+//
+// Default orientation: Vertical standing on inlet hose barb (+Z).
+// Tilted downstream air intake and 45° double-taper ridges require 0 supports.
 // ====================================================================
 
 $fn = 90;
@@ -31,12 +34,25 @@ air_tube_id         = 6.0;
 // Wall thickness of the air nipple
 air_nipple_wall     = 2.0;  
 // Height of the air intake stem
-air_nipple_height   = 12.0; 
+air_nipple_protrude = 22.0;
+ 
+// [Inlet Barb Clearance Spacer]
+// Smooth barb-less straight tube distance before barb starts (clears air tube clamp/access)
+spacer_len          = 12.0; 
+
+// [Bed Adhesion & Structural Support Ridge (Bottom)]
+// Width of the flat contact foot on the build plate (stops cylindrical rolling/warping)
+foot_width          = 5.0; 
 
 // --- CALCULATED VALUES ---
+air_nipple_height   = air_nipple_protrude + 31;
 air_nipple_od       = air_tube_id + (2 * air_nipple_wall);
 air_bore_id         = max(3.0, air_tube_id - 1.5);
 main_id             = mating_hose_id - (2 * wall_thick);
+total_length        = (2 * barb_length) + spacer_len + converge_len + diverge_len;
+max_outer_r         = (mating_hose_id / 2) + barb_ridge_extra;
+
+air_nipple_offset   = air_tube_id + air_nipple_wall + max(air_nipple_wall, wall_thick);
 
 // --- MODULES ---
 
@@ -44,15 +60,21 @@ module hose_barb(od, len, wall) {
     id = od - (2 * wall);
     num_ridges = 3;
     ridge_spacing = len / (num_ridges + 1);
+    ridge_h = 4.0;
     
     difference() {
         union() {
-            // Main cylindrical barb body (outer diameter matches hose ID)
+            // Main cylindrical barb body
             cylinder(r = od/2, h = len, center = false);
-            // Retention ridges for hose clamp sealing
+            // Symmetrical double-taper ridges (steep bidirectional taper, 100% printable standing without support)
             for (i = [1 : num_ridges]) {
-                translate([0, 0, i * ridge_spacing])
-                    cylinder(r1 = (od/2) + barb_ridge_extra, r2 = od/2, h = 2.5, center = false);
+                translate([0, 0, i * ridge_spacing - (ridge_h / 2)]) {
+                    // Lower taper ramping up (45° angle)
+                    cylinder(r1 = od/2, r2 = (od/2) + barb_ridge_extra, h = ridge_h / 2, center = false);
+                    // Upper taper ramping down (45° angle)
+                    translate([0, 0, ridge_h / 2])
+                        cylinder(r1 = (od/2) + barb_ridge_extra, r2 = od/2, h = ridge_h / 2, center = false);
+                }
             }
         }
         // Inner bore
@@ -73,54 +95,77 @@ module air_nipple_outer(base_r, stem_h, nipple_r) {
 }
 
 module venturi_core() {
-    inlet_r  = main_id / 2;
-    throat_r = throat_id / 2;
+    inlet_ir  = main_id / 2;
+    throat_ir = throat_id / 2;
     
-    inlet_od_r  = mating_hose_id / 2;
-    throat_od_r = throat_r + wall_thick;
+    inlet_or  = mating_hose_id / 2;
+    throat_or = throat_ir + wall_thick;
+    
+    // Angle of the converging cone wall relative to the central Z axis
+    converge_angle = atan2(inlet_or - throat_or, converge_len);
     
     difference() {
         union() {
             // Converging outer cone
-            cylinder(r1 = inlet_od_r, r2 = throat_od_r, h = converge_len, center = false);
+            cylinder(r1 = inlet_or, r2 = throat_or, h = converge_len, center = false);
             // Diverging outer cone
             translate([0, 0, converge_len])
-                cylinder(r1 = throat_od_r, r2 = inlet_od_r, h = diverge_len, center = false);
-            // Tapered air suction nipple on the outside of the throat
+                cylinder(r1 = throat_or, r2 = inlet_or, h = diverge_len, center = false);
+            // Tapered air suction nipple tilted to share the converging cone wall slope
+            // and pointing downstream towards the expansion chamber (+Z)
             translate([0, 0, converge_len])
-                rotate([0, 90, 0])
-                    air_nipple_outer(inlet_od_r, air_nipple_height, air_nipple_od / 2);
+                rotate([0, converge_angle, 0])
+                    translate([air_nipple_offset,0,-10])
+                        air_nipple_outer(inlet_or, air_nipple_height, air_nipple_od / 2);
         }
         
         // Internal Flow Path (The Venturi)
         // 1. Converging cone
         translate([0, 0, -0.01])
-            cylinder(r1 = inlet_r, r2 = throat_r, h = converge_len + 0.02, center = false);
+            cylinder(r1 = inlet_ir, r2 = throat_ir, h = converge_len + 0.02, center = false);
             
         // 2. Diverging expansion cone
         translate([0, 0, converge_len])
-            cylinder(r1 = throat_r, r2 = inlet_r, h = diverge_len + 0.01, center = false);
+            cylinder(r1 = throat_ir, r2 = inlet_ir, h = diverge_len + 0.01, center = false);
             
-        // 3. Air suction hole drilled straight through the nipple into the throat center
+        // 3. Air suction hole drilled through the tilted nipple into the start of the expansion chamber
         translate([0, 0, converge_len])
-            rotate([0, 90, 0])
-                cylinder(r = air_bore_id / 2, h = inlet_od_r + air_nipple_height + 5, center = false);
+            rotate([0, converge_angle, 0])
+                translate([air_nipple_offset,0,-10])
+                    cylinder(r = air_bore_id / 2, h = inlet_or + air_nipple_height + 5, center = false);
     }
 }
 
-// --- COMPLETE ASSEMBLY ---
-module full_aerator() {
-    // 1. Inlet Hose Barb (From Pump)
+
+
+module straight_pipe(od, len, wall) {
+    id = od - (2 * wall);
+    difference() {
+        cylinder(r = od/2, h = len, center = false);
+        translate([0, 0, -1])
+            cylinder(r = id/2, h = len + 2, center = false);
+    }
+}
+
+// --- VERTICAL ASSEMBLY PRIMITIVE ---
+module aerator() {
+    // 1. Inlet Hose Barb
     hose_barb(mating_hose_id, barb_length, wall_thick);
-    
-    // 2. Venturi Aeration Core
+        
+    // 2. Venturi Core
     translate([0, 0, barb_length])
         venturi_core();
         
-    // 3. Outlet Hose Barb (To Pool Inlet)
+    // 3. Smooth barb-less straight spacer tube after the venturi core
     translate([0, 0, barb_length + converge_len + diverge_len])
+        straight_pipe(mating_hose_id, spacer_len, wall_thick);
+        
+    // 4. Outlet Hose Barb
+    translate([0, 0, barb_length + converge_len + diverge_len + spacer_len])
         hose_barb(mating_hose_id, barb_length, wall_thick);
 }
 
+// --- COMPLETE PRINT-READY ORIENTATION ---
+
 // Render
-full_aerator();
+aerator();

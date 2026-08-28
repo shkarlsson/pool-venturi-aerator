@@ -41,10 +41,22 @@ The automated CI pipeline compiles and verifies 12 standard size combinations ($
 ## 🖨️ Recommended Print Settings
 
 * **Filament:** **PETG** or **ASA** (Chlorine, water pressure, and UV resistance are mandatory; do not use PLA).
-* **Orientation:** Print vertically standing on one of the hose barbs.
+* **Orientation:** Print vertically standing on the **inlet hose barb** ($Z=0$).
+* **Supports:** **None needed.** The tilted downstream air intake and the 45° double-taper hose retention ridges are 100% self-supporting when standing vertically.
 * **Perimeters / Walls:** Set to **5–6 walls** (or 100% infill) so the part is solid and completely watertight under backpressure.
-* **Supports:** None needed if printed vertically.
 * **Layer Height:** 0.20 mm.
+
+---
+
+## 🔧 Installation & Plumbing Instructions
+
+1. **Direction of Flow:** Water must enter through the short inlet barb, pass through the converging nozzle, pass the air suction orifice, and exit through the longer outlet/spacer barb toward the pool return inlet.
+2. **Snorkel / Anti-Siphon Tube Height (CRITICAL):**
+   * Connect a flexible hose / tube (garden hose or 6/8mm silicone tubing) to the barbed air intake nipple.
+   * Secure it with a small hose clamp or zip-tie.
+   * **Route the open end of the air tube well ABOVE the maximum pool water level** (e.g. zip-tied to a top pool rail or fence post).
+   * ⚠️ *Why?* When the pool pump turns off, water pressure drops and pool water can backflow out of the air nipple by gravity. Keeping the tube opening above the pool water line acts as an air siphon break, preventing pool draining / water leaks onto your equipment pad.
+3. **Flow Tuning / Air Control (Optional):** You can install a small inline valve or thumbscrew clamp on the air tube to dial between silent high-flow water jetting and maximum aeration / frothing.
 
 ---
 

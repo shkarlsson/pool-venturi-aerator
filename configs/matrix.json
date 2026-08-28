@@ -1,0 +1,125 @@
+{
+  "project": "pool-venturi-aerator",
+  "variants": [
+    {
+      "name": "aerator_32mm_air6mm_pumpSmall",
+      "description": "32mm pool hose (1.25 in), 6mm air tube, Small Pump (<3 m³/h)",
+      "params": {
+        "mating_hose_id": 32.0,
+        "air_tube_id": 6.0,
+        "throat_id": 12.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_32mm_air6mm_pumpMed",
+      "description": "32mm pool hose (1.25 in), 6mm air tube, Medium Pump (3-6 m³/h / Sand)",
+      "params": {
+        "mating_hose_id": 32.0,
+        "air_tube_id": 6.0,
+        "throat_id": 14.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_32mm_air6mm_pumpLarge",
+      "description": "32mm pool hose (1.25 in), 6mm air tube, Large Pump (>6 m³/h)",
+      "params": {
+        "mating_hose_id": 32.0,
+        "air_tube_id": 6.0,
+        "throat_id": 16.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_32mm_air8mm_pumpSmall",
+      "description": "32mm pool hose (1.25 in), 8mm air tube, Small Pump (<3 m³/h)",
+      "params": {
+        "mating_hose_id": 32.0,
+        "air_tube_id": 8.0,
+        "throat_id": 12.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_32mm_air8mm_pumpMed",
+      "description": "32mm pool hose (1.25 in), 8mm air tube, Medium Pump (3-6 m³/h / Sand)",
+      "params": {
+        "mating_hose_id": 32.0,
+        "air_tube_id": 8.0,
+        "throat_id": 14.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_32mm_air8mm_pumpLarge",
+      "description": "32mm pool hose (1.25 in), 8mm air tube, Large Pump (>6 m³/h)",
+      "params": {
+        "mating_hose_id": 32.0,
+        "air_tube_id": 8.0,
+        "throat_id": 16.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_38mm_air6mm_pumpSmall",
+      "description": "38mm pool hose (1.5 in), 6mm air tube, Small Pump (<3 m³/h)",
+      "params": {
+        "mating_hose_id": 38.0,
+        "air_tube_id": 6.0,
+        "throat_id": 14.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_38mm_air6mm_pumpMed",
+      "description": "38mm pool hose (1.5 in), 6mm air tube, Medium Pump (3-6 m³/h / Sand)",
+      "params": {
+        "mating_hose_id": 38.0,
+        "air_tube_id": 6.0,
+        "throat_id": 16.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_38mm_air6mm_pumpLarge",
+      "description": "38mm pool hose (1.5 in), 6mm air tube, Large Pump (>6 m³/h)",
+      "params": {
+        "mating_hose_id": 38.0,
+        "air_tube_id": 6.0,
+        "throat_id": 18.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_38mm_air8mm_pumpSmall",
+      "description": "38mm pool hose (1.5 in), 8mm air tube, Small Pump (<3 m³/h)",
+      "params": {
+        "mating_hose_id": 38.0,
+        "air_tube_id": 8.0,
+        "throat_id": 14.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_38mm_air8mm_pumpMed",
+      "description": "38mm pool hose (1.5 in), 8mm air tube, Medium Pump (3-6 m³/h / Sand)",
+      "params": {
+        "mating_hose_id": 38.0,
+        "air_tube_id": 8.0,
+        "throat_id": 16.0,
+        "barb_length": 25.0
+      }
+    },
+    {
+      "name": "aerator_38mm_air8mm_pumpLarge",
+      "description": "38mm pool hose (1.5 in), 8mm air tube, Large Pump (>6 m³/h)",
+      "params": {
+        "mating_hose_id": 38.0,
+        "air_tube_id": 8.0,
+        "throat_id": 18.0,
+        "barb_length": 25.0
+      }
+    }
+  ]
+}

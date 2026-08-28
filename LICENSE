@@ -1,0 +1,43 @@
+CERN Open Hardware Licence Version 2 - Strongly Reciprocal (CERN-OHL-S-v2)
+
+Preamble
+CERN has developed this Licence to promote collaborating on the hardware
+which we design and use. Although the words which follow are legal
+language, our spirit is simple: we want everyone to be able to use the
+designs which we share, but we also want you to share back any
+improvements which you make.
+
+1 Definitions
+1.1 'Licence' means this CERN-OHL-S.
+1.2 'Source' means information such as design materials, schematics,
+instructions, CAD files and other documentation that is used to create
+the Product.
+1.3 'Product' means any physical object designed or manufactured using
+the Source.
+1.4 'You' means an individual or entity exercising rights under this
+Licence.
+1.5 'Licensee' means You, once You have accepted this Licence.
+1.6 'Contributor' means a person or entity that releases changes to the
+Source under this Licence.
+1.7 'Make Available' means to provide or offer access to the Source or
+Product to any third party.
+
+2 Grant of Rights
+2.1 Contributor grants You a perpetual, worldwide, non-exclusive,
+no-charge, royalty-free, irrevocable copyright and patent licence to use,
+copy, modify, communicate, and Make Available the Source, subject to the
+conditions below.
+
+3 Conditions and Reciprocal Obligations
+3.1 If You Make Available modified Source, You must release all Your
+modifications under this same CERN-OHL-S Licence.
+3.2 If You Make Available Products (such as manufactured 3D prints or parts)
+based on this Source or modified Source, You must Make Available the complete
+corresponding Source to every recipient of the Product under this Licence.
+3.3 You must maintain all copyright notices, license notices, and design
+credits on all copies of Source and on physical Products where technically
+feasible.
+
+4 Disclaimer and Limitation of Liability
+4.1 The Source is provided "AS IS", without warranty of any kind, express
+or implied.

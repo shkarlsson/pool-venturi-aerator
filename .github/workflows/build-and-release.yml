@@ -1,0 +1,64 @@
+name: Build, Test & Release 3D Models
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install OpenSCAD & System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openscad xvfb python3-pip
+
+      - name: Setup Python & Mesh Tools
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install trimesh numpy scipy
+
+      - name: Run Automated Geometry & Manifold Tests
+        run: |
+          python3 tests/test_geometry.py
+
+      - name: Compile Full Release Matrix (STLs & Previews)
+        run: |
+          mkdir -p dist
+          python3 - << 'EOF'
+          import json, subprocess, os
+          with open("configs/matrix.json") as f:
+              data = json.load(f)
+          scad_path = "src/pool_venturi_aerator.scad"
+          for v in data["variants"]:
+              name = v["name"]
+              stl_out = f"dist/{name}.stl"
+              png_out = f"dist/{name}.png"
+              params = []
+              for k, val in v["params"].items():
+                  params.extend(["-D", f"{k}={val}"])
+              print(f"Building {name}...")
+              subprocess.run(["openscad", "-o", stl_out, scad_path] + params, check=True)
+              # Render 3D preview thumbnail via headless Xvfb
+              subprocess.run(["xvfb-run", "-a", "openscad", "--imgsize=1024,768", "--autocenter", "--viewall", "-o", png_out, scad_path] + params, check=True)
+          EOF
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pool-venturi-aerator-models
+          path: dist/*
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
